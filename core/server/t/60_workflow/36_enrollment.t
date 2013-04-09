@@ -68,6 +68,14 @@ BEGIN {
     $cfgbase =~ s/\.t-(\d+)-of-(\d+)$/.d/;
 }
 
+# IMPORTANT: When running on Travis, just skip this test
+# because it takes way too long.
+
+if ( $ENV{TRAVIS} and $ENV{TRAVIS} eq 'true' ) {
+    plan skip_all => 'Skip _all_ tests on Travis';
+    exit;
+}
+
 eval { use lib ( $cfgbase . '/mocklib' ) };
 
 my $debug                = $ENV{TEST_DEBUG}         || 0;
