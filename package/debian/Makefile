@@ -15,6 +15,7 @@
 # do not change the order
 # some packages have build dependencies
 PACKAGES=			\
+	perl			\
 	core			\
 	i18n 			\
 	mason-html-client 
