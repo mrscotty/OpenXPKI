@@ -324,6 +324,7 @@ WriteMakefile(
 	'Log::Log4perl'          => '0.51',
         'Mail::RFC822::Address'  => '0.3',
 	'Math::BigInt'           => 1,
+	'MIME::Lite'           => 1,
 	'Moose'                  => 1,
         'Net::IP'                => 1,
 	'Net::LDAP'              => "0.32",
