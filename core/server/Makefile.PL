@@ -298,10 +298,10 @@ WriteMakefile(
     'CCFLAGS'   => '-O2 -g '.$Config{ccflags},
     'PREREQ_PM' => {
     'Class::Accessor::Fast'  => '0.31',
-    'Class::Accessor::Chained::Fast' => undef,
+    'Class::Accessor::Chained::Fast' => 0,
     'Class::Std'             => '0.0.8',
     'CGI::Session'           => '3.95',
-    'Config::Std'            => undef,
+    'Config::Std'            => '0.901',
     'Config::Merge'          => '1',
     'Config::Versioned'      => '1.01',
     'Connector'              => '1.08',
