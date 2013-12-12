@@ -111,7 +111,7 @@ $(OXI_CPANM): $(OXI_PERL)
 .PHONY: build-cpan
 build-cpan: $(OXI_PERL_PREFIX)/.build-cpan
 $(OXI_PERL_PREFIX)/.build-cpan: $(OXI_CPANM)
-	PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) --quiet --notest Config::Std YAML::XS
-	PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) --quiet --installdeps --notest Workflow
-	(cd $(OXI_SOURCE) && PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) --quiet --installdeps --notest .)
+	PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) $(CPANM_OPTS) --quiet --notest Config::Std YAML::XS
+	PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) $(CPANM_OPTS) --quiet --installdeps --notest Workflow
+	(cd $(OXI_SOURCE) && PERL5LIB= PATH=$(OXI_PERL_BINDIR):$(PATH) $(OXI_CPANM) $(CPANM_OPTS) --quiet --installdeps --notest .)
 	touch $@
