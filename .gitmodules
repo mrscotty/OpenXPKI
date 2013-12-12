@@ -1,0 +1,3 @@
+[submodule "vagrant/shoestrap"]
+	path = vagrant/shoestrap
+	url = https://github.com/cmer/shoestrap.git
