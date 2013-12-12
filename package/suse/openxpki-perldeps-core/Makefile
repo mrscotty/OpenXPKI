@@ -163,8 +163,22 @@ $(NEWPERL): $(PERL_SOURCE_TARBALL_LONG)
 .PHONY: build-cpan-cpanm
 build-cpan-cpanm: $(NEWCPANM)
 
+$(HOME)/certs/digicert-high.pem:
+	dirname $@ | xargs mkdir -p
+curl http://curl.haxx.se/ca/cacert.pem -s \
+	| perl -00 -ne 'print if /DigiCert High/' \
+	| tail -n +3 \
+	> $@
+
+# NOTE: if your curl errors out here, you'll need to install some certs. Just
+# use the target just above here to fetch the cert file.
+DIGICERT_FILE := $(wildcard $(HOME)/certs/digicert-high.pem)
+ifdef DIGICERT_FILE
 $(NEWCPANM): $(NEWPERL)
-	curl --insecure -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+	curl --cacert "$(DIGICERT_FILE)" -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+else
+	curl -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+endif
 
 #	(wget -O Config-Versioned.tar.gz https://github.com/mrscotty/Config-Versioned/tarball/master && tar xzf Config-Versioned.tar.gz)
 # (cd mrscotty-Config-Versioned-* && cpanm --quiet --installdeps --notest .)
