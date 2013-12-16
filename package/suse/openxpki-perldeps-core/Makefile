@@ -23,7 +23,7 @@ VERGEN := $(TOPDIR)/tools/vergen
 VERSION := $(shell $(VERGEN) --format version)
 PKGREL := $(shell $(VERGEN) --format PKGREL)
 
-PERL_ROOT=/usr/share/$(PERLNAME)
+PERL_ROOT=/opt/openxpki
 PERL_VERSION=5.14.2
 PERL_5_BASEURL=http://ftp.gwdg.de/pub/languages/perl/CPAN/src/5.0
 PERL_SOURCE_TARBALL=perl-$(PERL_VERSION).tar.bz2
@@ -175,9 +175,10 @@ curl http://curl.haxx.se/ca/cacert.pem -s \
 DIGICERT_FILE := $(wildcard $(HOME)/certs/digicert-high.pem)
 ifdef DIGICERT_FILE
 $(NEWCPANM): $(NEWPERL)
-curl --cacert "$(DIGICERT_FILE)" -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+	curl --cacert "$(DIGICERT_FILE)" -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
 else
-curl -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+$(NEWCPANM): $(NEWPERL)
+	curl -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
 endif
 
 #	(wget -O Config-Versioned.tar.gz https://github.com/mrscotty/Config-Versioned/tarball/master && tar xzf Config-Versioned.tar.gz)
