@@ -58,7 +58,7 @@ default-check:
 default-nocheck:
 	$(MAKE) control
 	$(MAKE) changelog
-	$(MAKE) /tmp/$(PERLNAME)-$(PERL_VERSION).tar.gz
+	$(MAKE) /tmp/$(OXI_PERL_NAME)-$(OXI_PERL_VERSION).tar.gz
 	$(MAKE) /tmp/openxpki-debian.tar.gz
 	$(MAKE) source
 	$(MAKE) package

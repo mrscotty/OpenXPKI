@@ -12,6 +12,7 @@ PACKAGES=\
 #	perl-openxpki-client-html-sc 
 
 OPT_PACKAGES=\
+    openxpki-perldeps-core \
 	openxpki-perldeps-enrollment
 
 ifdef PREFIX
