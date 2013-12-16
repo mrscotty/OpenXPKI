@@ -175,9 +175,9 @@ curl http://curl.haxx.se/ca/cacert.pem -s \
 DIGICERT_FILE := $(wildcard $(HOME)/certs/digicert-high.pem)
 ifdef DIGICERT_FILE
 $(NEWCPANM): $(NEWPERL)
-	curl --cacert "$(DIGICERT_FILE)" -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+curl --cacert "$(DIGICERT_FILE)" -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
 else
-	curl -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
+curl -L http://cpanmin.us | PERL5LIB= $(NEWPERL) - --self-upgrade
 endif
 
 #	(wget -O Config-Versioned.tar.gz https://github.com/mrscotty/Config-Versioned/tarball/master && tar xzf Config-Versioned.tar.gz)
