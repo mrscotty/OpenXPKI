@@ -1,0 +1,12 @@
+# This include Makefile takes care of the OpenXPKI and Git-specific
+# stuff.
+#
+# Important: This is from the perspective of the Vagrant host and
+# not the individual Vagrant VM instances.
+#
+
+
+define get-core-manifest
+$(TOPDIR)/core/server/MANIFEST
+endef
+

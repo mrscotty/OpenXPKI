@@ -1,0 +1,25 @@
+# This tries to set up a couple of prereqs for you
+
+HOSTNAME=$(shell hostname)
+TOPDIR=..
+
+VAGRANT_PREREQS = known_hosts env.profile
+
+all: $(VAGRANT_PREREQS)
+
+#
+# NOTE: if the known_hosts.$(HOSTNAME) doesn't exist, create it
+# by connecting to $(HOSTNAME) with SSH and then copying the
+# entry from ~/.ssh/known_hosts to known_hosts.$(HOSTNAME)
+#
+known_hosts: $(TOPDIR)/etc/known_hosts.d/known_hosts.$(HOSTNAME)
+	cp -p $^ $@
+
+env.profile:
+	> $@
+	echo ': $${GITUSER:=$(USER)}' >> $@
+	echo 'export GITUSER' >> $@
+	echo ': $${RPMBASE:="$$HOME/rpmbuild"}' >> $@
+	echo 'export RPMBASE' >> $@
+	echo "export http_proxy=$(http_proxy)" >> $@
+	echo "export https_proxy=$(https_proxy)" >> $@

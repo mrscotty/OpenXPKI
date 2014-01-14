@@ -1,0 +1,36 @@
+# OVERVIEW
+
+Vagrant is a handy tool for creating and provisioning test VirtualBox
+instances in a controlled fashion. 
+
+# USAGE
+
+The following configurations are available:
+
+* Quickstart Demo   - For installing OpenXPKI from the pre-built packages
+* Build and Test    - For installing from local working repository
+
+For each of these, just change to the corresponding subdirectory and use
+the Vagrant commands like 'vagrant up', 'vagrant ssh' and 'vagrant destroy'.
+Some have multiple instances configured, so run 'vagrant status' or look in
+the Vagrantfile to see what is available.
+
+## Quickstart Demo (quickstart/)
+
+**To Be Developed**
+
+## Build and Test (build/)
+
+This Vagrant configuration consists of three instances: build, root and level2.
+
+The basic idea is that packages are built from the current working repository and
+installed on the separate instance(s). This allows a developer to work directly off
+developer or feature branches rather than depending on the pre-built packages.
+
+### "build"
+
+This instance is used for building the packages. It clones the working repository
+to prevent the build from accidentally polluting the working repository with
+temporary files.
+
+

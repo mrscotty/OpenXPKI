@@ -1,0 +1,81 @@
+# This include Makefile takes care of the Git-specific stuff.
+#
+# Important: This is from the perspective of the Vagrant host and
+# not the individual Vagrant VM instances.
+#
+# Implementation Notes:
+#
+# A primary requirement is consistent package builds. Therefore,
+# we track commit hash of HEAD in a file that is a dependency
+# of the make rule for the package files. If the commit hash
+# changes, this file is updated. We don't bother trying to
+# use 'touch' to set the file to the same time as the commit.
+
+
+#.PHONY: assert-git-is-clean
+#assert-git-is-clean:
+#	$(call assert-not,$(shell git diff),Git HEAD is not clean)
+
+#GIT_CURR_BRANCH = $(shell git branch | grep '^*' | awk '{print $$2}')
+#GIT_CURR_HASH = $(shell git log -1 --pretty=oneline | awk '{print $$1}')
+
+define assert-git-clean
+$(call assert-not,$(shell git diff),Git HEAD is not clean)
+endef
+
+define curr-git-branch
+$(strip $(shell git branch | grep '^*' | awk '{print $$2}'))
+endef
+
+
+# $(call curr-git-dir-hash,directory)
+define curr-git-dir-hash
+$(shell cd $1 && git log -1 --pretty=oneline | awk '{print $$1}')
+endef
+
+# TODO: Have this read the package file!!!
+# $(call curr-git-pkg-hash,package-file)
+ifeq ($(OS_PACKAGE_TYPE),debian)
+$(warning "OS_PACKAGE_TYPE *DOES* EQUAL debian")
+define curr-git-pkg-hash
+$(shell grep git-hash $1 | awk '{print $$2}')
+endef
+endif
+
+#	$(error "OS_PACKAGE_TYPE '$(OS_PACKAGE_TYPE)' not supported")
+
+## $(call compare-pkg-repo-hash,package-file,repo-dir)
+## Returns '1' on match, '0' on mis-match
+#define compare-pkg-repo-hash
+#ifeq "$(call curr-git-pkg-hash,$1)" "$(call curr-git-dir-hash,$2)"
+#
+#$(shell \
+#curr_git_pkg_hash=$(call curr-git-pkg-hash,$1); \
+#curr_git_dir_hash=$(call curr-git-dir-hash,$2); \
+#if [ "$curr_git_pkg_hash"x == "$curr_git_pkg_hash"x ] then \
+#  echo "1"; \
+#else; \
+#  echo "0"; \
+#fi)
+#endef
+
+# $(call update-git-dep,git-dir,package-file,dependency-file)
+define update-git-dep
+ifeq "$(call curr-git-dir-hash,$1)" "$(call curr-git-pkg-hash,$2)"
+	$(shell touch $3)
+else
+	$(shell touch -r $2 $3)
+endif
+endef
+
+#$(shell \
+#	curr_git_dir_hash=$(call curr-git-dir-hash,$1); \
+#	curr_git_dep_hash=$(call curr-git-dep-hash,$2); \
+#	if [ "$$curr_git_dir_hash"x != "$$curr_git_dep_hash"
+#)
+#endef
+
+
+
+
+
