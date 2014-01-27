@@ -1,0 +1,14 @@
+# This include Makefile takes care of the OpenSuSE-specific stuff.
+# Important: This is from the perspective of the Vagrant host and
+# not the individual Vagrant VM instances.
+#
+
+# Name of Vagrant VM instance in Vagrantfile
+BUILD_VM = build
+
+# In the instances, this is /vagrant/packages
+SHAREDIR_PACKAGES = packages
+
+
+
+

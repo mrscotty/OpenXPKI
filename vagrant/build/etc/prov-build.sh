@@ -2,7 +2,9 @@
 #
 # prov-build.sh - Provision build VM
 
-. /vagrant/etc/helper
+helper=`dirname $0`/helper
+echo "DEBUG: Sourcing '$helper'"
+. $helper
 
 fail_if_not_root
 

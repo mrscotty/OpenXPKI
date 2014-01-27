@@ -1,0 +1,18 @@
+# Makefile-build.incl
+#
+# This Makefile contains the targets for actually running the build 
+# tasks on the VM.
+
+.PHONY: pull
+pull: .vagrant/machines/build/virtualbox/id
+	vagrant ssh build --command "/code-repo/vagrant/build/etc/run-git-refresh.sh"
+
+.mk-state.git-refresh: .vagrant/machines/build/virtualbox/id
+	vagrant ssh build --command "TARGETS='$(TARGETS)' /vagrant/etc/run-git-refresh.sh"
+
+build: .mk-state.git-refresh
+	vagrant ssh build --command "TARGETS='$(TARGETS)' /vagrant/etc/run-build.sh"
+
+openxpki-perldeps-core: .mk-state.git-refresh
+	vagrant ssh build --command "(cd git/openxpki/package/suse && make $@)"
+

@@ -1,0 +1,18 @@
+# This include Makefile takes care of the Vagrant-specific stuff.
+#
+# Important: This is from the perspective of the Vagrant host and
+# not the individual Vagrant VM instances.
+#
+# Implementation Notes:
+#
+
+.vagrant/machines/%/virtualbox/id: $(VAGRANT_PREREQS)
+	vagrant up `echo $@ | awk -F/ '{print $$3}'`
+
+.PHONY: clean-all-vagrant
+clean-all-vagrant:
+	vagrant destroy -f
+
+
+
+

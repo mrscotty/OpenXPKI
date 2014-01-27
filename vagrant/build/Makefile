@@ -7,6 +7,7 @@ PACKAGE_TARGETS = core i18n mason-html-client
 include $(TOPDIR)/vagrant/etc/Makefile-git.incl
 include $(TOPDIR)/vagrant/etc/Makefile-debian.incl
 include $(TOPDIR)/vagrant/etc/Makefile-project.incl
+include $(TOPDIR)/vagrant/etc/Makefile-vagrant.incl
 
 #core.deb: $(call get-core-manifest)
 
