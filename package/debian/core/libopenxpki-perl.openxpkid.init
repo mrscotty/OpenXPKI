@@ -14,10 +14,10 @@
 # Do NOT "set -e"
 
 # PATH should only include /usr/* if it runs after the mountnfs.sh script
-PATH=/usr/sbin:/usr/bin:/sbin:/bin
+PATH=/opt/myperl/bin:/usr/sbin:/usr/bin:/sbin:/bin
 DESC="OpenXPKI daemon"
 NAME=openxpki
-DAEMON=/usr/bin/openxpkictl
+DAEMON=/opt/myperl/bin/openxpkictl
 PIDFILE=/var/run/openxpkid.pid
 SCRIPTNAME=/etc/init.d/openxpkid
 

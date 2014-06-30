@@ -8,10 +8,47 @@ PERLNAME=OpenXPKI
 PKGDIR=../deb/core
 EXAMPLE=$(TOPDIR)/config
 
-# Makefile.inc contains common settings for all packages (checked in)
-include ../Makefile.inc
 # Makefile.local may be used locally to override settings (not checked in)
 -include ../Makefile.local
+
+VERGEN = $(TOPDIR)/tools/vergen
+OUR_BASENAME = $(PACKAGE)
+OUR_VERSION = $(shell $(VERGEN) --format version)
+OUR_SOURCE_TARBALL = $(OUR_BASENAME)_$(OUR_VERSION).orig.tar.bz2
+OUR_SOURCE_DIR = $(OUR_BASENAME)-$(OUR_VERSION)
+DEBIAN_PKG = $(OUR_BASENAME)_$(OUR_VERSION)_amd64.deb
+
+all: $(DEBIAN_PKG)
+
+doit: info $(OUR_SOURCE_TARBALL)
+
+info:
+	@echo "OUR_SOURCE_TARBALL = $(OUR_SOURCE_TARBALL)"
+
+$(OUR_SOURCE_TARBALL):
+	(cd $(TOPDIR) && git archive --format=tar \
+		--prefix=$(OUR_SOURCE_DIR)/ HEAD ) \
+		 | bzip2 > $@
+
+
+.PHONY: unpack-tarball
+
+unpack-tarball: $(OUR_SOURCE_TARBALL) control changelog
+	# unpack the oxi tarball
+	tar xjf $<
+	# copy over the debian/ stuff
+	mkdir $(OUR_SOURCE_DIR)/debian
+	tar cf - changelog compat control copyright $(PACKAGE).openxpkid.init \
+		$(PACKAGE).preinst $(PACKAGE).postinst $(PACKAGE).examples $(PACKAGE).dirs \
+		rules \
+		| tar xf - -C $(OUR_SOURCE_DIR)/debian
+
+$(DEBIAN_PKG): unpack-tarball examples
+	cd $(OUR_SOURCE_DIR) && \
+		DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc
+
+clean:
+	rm -rf $(OUR_SOURCE_DIR)
 
 examples:
 	cd $(EXAMPLE); \
@@ -25,3 +62,15 @@ examples:
 	cd feature; \
 	tar -zcf ../openxpki-feature.tgz *; \
 	cd ..
+
+#
+#=======
+#	mkdir $(OUR_SOURCE_DIR)/examples
+#	tar -czf $(OUR_SOURCE_DIR)/examples/htdocs.tgz -C $(EXAMPLE)/.. htdocs
+#	tar -cf - -C $(EXAMPLE) log.conf sampleconfig.sh openxpki-scep.conf README | \
+#		tar xf - -C $(OUR_SOURCE_DIR)/examples
+#	for i in basic profiles soap scep webui notification; do \
+#		tar -czf $(OUR_SOURCE_DIR)/examples/$$i.tgz -C $(EXAMPLE) $$i; \
+#	done 
+#
+#>>>>>>> debian packaging for myperl and cpan deps
