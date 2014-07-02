@@ -3,6 +3,9 @@
 #
 # see: dh_installdeb(1)
 
+PATH=/opt/myperl/bin:$PATH
+export PATH
+
 set -e
 
 # summary of how this script can be called:
