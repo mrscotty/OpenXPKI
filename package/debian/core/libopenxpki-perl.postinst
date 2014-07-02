@@ -3,6 +3,8 @@
 #
 # see: dh_installdeb(1)
 
+set -x
+
 PATH=/opt/myperl/bin:$PATH
 export PATH
 
