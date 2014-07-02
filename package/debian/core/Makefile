@@ -8,6 +8,11 @@ PERLNAME=OpenXPKI
 PKGDIR=../deb/core
 EXAMPLE=$(TOPDIR)/config
 
+# common includes for package builds
+include $(TOPDIR)/package/common/Makefile.inc
+
+TT_EXTRA_SYMBOLS = --define BUILD_DATE="$(shell date --rfc-2822)"
+
 # Makefile.local may be used locally to override settings (not checked in)
 -include ../Makefile.local
 
