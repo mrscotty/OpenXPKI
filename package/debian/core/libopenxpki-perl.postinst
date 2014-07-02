@@ -86,7 +86,6 @@ case "$1" in
 	    if [ ! -e /etc/sudoers.d/pkiadm ] && [ -d /etc/sudoers.d ]; then
 	        echo "pkiadm ALL=(ALL) NOPASSWD:/etc/init.d/openxpki" > /etc/sudoers.d/pkiadm
         fi;
-
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
