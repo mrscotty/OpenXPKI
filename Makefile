@@ -66,6 +66,12 @@ clean-core:
 # it can't find Build.PL or Makefile.PL. This seems like a good spot for us
 # to be called. So, 'yes', this is where Travis-CI actually starts the tests.
 test: clean-core
+	(cd core/server && \
+		export PATH=/opt/myperl/bin:$$PATH && \
+		$(PERL) Makefile.PL && \
+		make test)
+
+test-deprecated: clean-core
 	mkdir -p $(TESTLOGDIR)
 	rm -f test.err
 	. $(PERLBREW_RC) && \
