@@ -15,6 +15,8 @@
 # Ubuntu uses dash, which sucks when using '.' to source an RC file.
 SHELL=/bin/bash
 
+PERL = /opt/myperl/bin/perl
+
 TESTLOGDIR=logs
 TESTLOG=$(TESTLOGDIR)/test-$(shell date "+%Y-%m-%d-%H%M").log
 
