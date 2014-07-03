@@ -20,7 +20,7 @@ SITESCRIPTEXP	= $(call perlcfg,sitescriptexp)
 # The --reinstall flag ensures that the package is built even if cpanm finds
 # the module already installed. I tried using this, but found that I ended
 # up with Test::Harness in both myperl and this supplemental package
-CPANM_OPTS = --notest --verbose --skip-satisfied --skip-installed --build-args="INSTALLPRIVLIB=$(SITELIB)"
+CPANM_OPTS = --notest --skip-satisfied --skip-installed --build-args="INSTALLPRIVLIB=$(SITELIB)"
 
 -include ../cpanm.mk
 -include ../../Makefile.local

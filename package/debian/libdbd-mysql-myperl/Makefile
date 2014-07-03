@@ -25,7 +25,7 @@ export PERL_MM_OPT	= "INSTALLDIRS=site DESTDIR=$(DESTDIR)"
 
 include ../cpanm.mk
 
-CPANM_OPTS = --notest --verbose --skip-satisfied --skip-installed
+CPANM_OPTS = --notest --skip-satisfied --skip-installed
 
 info:
 	@echo "*** DEBUG ***"
