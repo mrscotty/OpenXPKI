@@ -68,14 +68,13 @@ examples:
 	tar -zcf ../openxpki-feature.tgz *; \
 	cd ..
 
-#
 #=======
 #	mkdir $(OUR_SOURCE_DIR)/examples
 #	tar -czf $(OUR_SOURCE_DIR)/examples/htdocs.tgz -C $(EXAMPLE)/.. htdocs
-#	tar -cf - -C $(EXAMPLE) log.conf sampleconfig.sh openxpki-scep.conf README | \
+#	tar -cf - -C $(EXAMPLE) log.conf sampleconfig.sh sampledbuser.sql openxpki-scep.conf README | \
 #		tar xf - -C $(OUR_SOURCE_DIR)/examples
 #	for i in basic profiles soap scep webui notification; do \
 #		tar -czf $(OUR_SOURCE_DIR)/examples/$$i.tgz -C $(EXAMPLE) $$i; \
 #	done 
-#
-#>>>>>>> debian packaging for myperl and cpan deps
+#>>>>>>> add sql script to example config
+
