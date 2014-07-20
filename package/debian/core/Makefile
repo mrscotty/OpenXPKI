@@ -55,7 +55,7 @@ $(DEBIAN_PKG): unpack-tarball examples
 clean:
 	rm -rf $(OUR_SOURCE_DIR)
 
-examples:
+examples-DEPRECATED:
 	cd $(EXAMPLE); \
 	tar -czf /tmp/openxpki-examples.tar.gz .; \
 	cd /tmp/$(PERLNAME)-*; \
@@ -68,13 +68,11 @@ examples:
 	tar -zcf ../openxpki-feature.tgz *; \
 	cd ..
 
-#=======
-#	mkdir $(OUR_SOURCE_DIR)/examples
-#	tar -czf $(OUR_SOURCE_DIR)/examples/htdocs.tgz -C $(EXAMPLE)/.. htdocs
-#	tar -cf - -C $(EXAMPLE) log.conf sampleconfig.sh sampledbuser.sql openxpki-scep.conf README | \
-#		tar xf - -C $(OUR_SOURCE_DIR)/examples
-#	for i in basic profiles soap scep webui notification; do \
-#		tar -czf $(OUR_SOURCE_DIR)/examples/$$i.tgz -C $(EXAMPLE) $$i; \
-#	done 
-#>>>>>>> add sql script to example config
+examples:
+	mkdir $(OUR_SOURCE_DIR)/examples
+	tar -cf - -C $(EXAMPLE) sampleconfig.sh sampledbuser.sql apache/openxpki-scep.conf README.md | \
+		tar xf - -C $(OUR_SOURCE_DIR)/examples
+	tar -czf $(OUR_SOURCE_DIR)/examples/openxpki-etc.tgz -C $(EXAMPLE) openxpki
+	tar -czf $(OUR_SOURCE_DIR)/examples/profiles.tgz -C $(EXAMPLE) profiles
+	tar -czf $(OUR_SOURCE_DIR)/examples/openxpki-feature.tgz -C $(EXAMPLE) feature
 
