@@ -45,7 +45,7 @@ case "$1" in
            mkdir -p -m 750 /etc/openxpki/config.git
            chown -R openxpki:root /etc/openxpki/config.d/
            chown -R openxpki:root /etc/openxpki/config.git/
-           openxpkiadm loadcfg 2>/dev/null
+           openxpkiadm loadcfg
        fi
 
        # Ubuntu names it conf-enabled while wheezy has conf.d
