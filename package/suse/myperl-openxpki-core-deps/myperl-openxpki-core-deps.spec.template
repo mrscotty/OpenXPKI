@@ -25,7 +25,7 @@ buildroot: %{_tmppath}/%{name}-%{version}-%(id -u -n)
 prefix:    %(echo %{_prefix})
 BuildRequires: myperl
 Requires: myperl
-#source:    %{pkgname}-%{version}.tar.gz
+source:    %{pkgname}-%{version}.tar.gz
 
 %description
 DBD::mysql packaged for myperl
@@ -41,7 +41,7 @@ Git tags:              [%- IF GIT_TAGS -%]
 [%- END %]
 
 %prep
-#%setup -q -n %{pkgname}-%{version} 
+%setup -q -n %{pkgname}-%{version} 
 #chmod -R u+w %{_builddir}/%{pkgname}-%{version}
 
 %build
@@ -57,6 +57,7 @@ Git tags:              [%- IF GIT_TAGS -%]
 
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+set -e
 
 PERL=%{__perl}
 
@@ -78,8 +79,13 @@ export DESTDIR="%{buildroot}"
 curl -LO http://xrl.us/cpanm
 chmod +x cpanm
 
-$CPANM $CPANM_OPTS Config::Std Class::Std
-(cd ../../../core/server && $CPANM $CPANM_OPTS --installdeps .)
+$CPANM $CPANM_OPTS Class::Std Config::Std
+echo "DEBUG: current directory = `pwd`"
+echo "DEBUG: contents of current directory:"
+ls -la
+echo "DEBUG: end of list"
+echo "DEBUG: PATH=$PATH"
+(cd core/server && $CPANM $CPANM_OPTS --installdeps .)
 
 
 ## This next line does a regular CPAN-style install. Our Mojo app, however,
