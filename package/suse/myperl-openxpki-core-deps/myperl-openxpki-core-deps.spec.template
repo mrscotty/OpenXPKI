@@ -23,8 +23,8 @@ group:     Applications/CPAN
 url:       http://www.openxpki.org
 buildroot: %{_tmppath}/%{name}-%{version}-%(id -u -n)
 prefix:    %(echo %{_prefix})
-BuildRequires: myperl
-Requires: myperl
+BuildRequires: myperl libexpat-devel
+Requires: myperl libexpat1
 source:    %{pkgname}-%{version}.tar.gz
 
 %description
@@ -66,6 +66,9 @@ SITEARCH=`%{__perl} "-V:sitearch" | awk -F\' '{print $2}'`
 SITELIBEXP=%{buildroot}/`%{__perl} "-V:sitelibexp" | awk -F\' '{print $2}'`
 ARCHNAME=`%{__perl} "-V:archname" | awk -F\' '{print $2}'`
 ARCHLIB=`%{__perl} "-V:archlib" | awk -F\' '{print $2}'`
+SITEMAN1EXP=`%{__perl} "-V:siteman1direxp" | awk -F\' '{print $2}'`
+SITEMAN3EXP=`%{__perl} "-V:siteman3direxp" | awk -F\' '{print $2}'`
+SITESCRIPTEXP=`%{__perl} "-V:sitescriptexp" | awk -F\' '{print $2}'`
 PRIVLIB=`%{__perl} "-V:privlib" | awk -F\' '{print $2}'`
 CPANM="%{__perl} `pwd`/cpanm"
 CPANM_OPTS="--notest --skip-satisfied --skip-installed --verbose"
@@ -115,6 +118,43 @@ find %{buildroot} -name "perllocal.pod" \
     -o -name ".packlist"                \
     -o -name "*.bs"                     \
     |xargs -i rm -f {}
+
+# myperl issue #2 - until I can get Pinto running, just remove the offending files
+# Note: since this is a nasty kludge, I'll leave the fail-on-error behavior.
+#
+# DESTDIR = %{buildroot}
+set -e
+rm -rf \
+		$DESTDIR/$SITEMAN3EXP/CGI.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Apache.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Carp.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Cookie.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Pretty.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Push.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Switch.3 \
+		$DESTDIR/$SITEMAN3EXP/CGI::Util.3 \
+		$DESTDIR/$SITELIB/CGI.pm \
+		$DESTDIR/$SITELIB/CGI/Apache.pm \
+		$DESTDIR/$SITELIB/CGI/Carp.pm \
+		$DESTDIR/$SITELIB/CGI/Cookie.pm \
+		$DESTDIR/$SITELIB/CGI/Pretty.pm \
+		$DESTDIR/$SITELIB/CGI/Push.pm \
+		$DESTDIR/$SITELIB/CGI/Switch.pm \
+		$DESTDIR/$SITELIB/CGI/Util.pm \
+		$DESTDIR/$SITEMAN3EXP/Module::Build* \
+		$DESTDIR/$SITELIB/Module/Build.pm \
+		$DESTDIR/$SITELIB/Module/Build \
+		$DESTDIR/$ARCHLIB/auto/Module/Build 
+# myperl issue #2 - let's just trash these for now
+rm -rf \
+		$DESTDIR/$SITESCRIPTEXP/config_data \
+		$DESTDIR/$SITEMAN1EXP/config_data.1 \
+		$DESTDIR/$SITEMAN3EXP/inc::latest.3 \
+		$DESTDIR/$SITELIB/inc
+
+# TODO: SOAPsh.pl has /bin/env in shebang, which causes a dependency
+# problem when rpm searches for automatic dependencies
+perl -i -p -e 's{#!/bin/env}{#!/usr/bin/env}' $DESTDIR/$SITESCRIPTEXP/SOAPsh.pl
 
 # no empty directories
 #find %{buildroot}%{_prefix}             \
