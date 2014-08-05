@@ -64,7 +64,7 @@ install: info cpanm
 	-rmdir $(DESTDIR)/lib/perl5/$(ARCHNAME) $(DESTDIR)/lib/perl5 $(DESTDIR)/lib
 	# remove perllocal.pod, if installed
 	-rm $(DESTDIR)$(ARCHLIB)/perllocal.pod
-	# Issue #2 - until I can get Pinto running, just remove the offending files
+	# myperl issue #2 - until I can get Pinto running, just remove the offending files
 	# Note: since this is a nasty kludge, I'll leave the fail-on-error behavior
 	# of make.
 	rm -rf \
@@ -88,7 +88,7 @@ install: info cpanm
 		$(DESTDIR)$(SITELIB)/Module/Build.pm \
 		$(DESTDIR)$(SITELIB)/Module/Build \
 		$(DESTDIR)$(ARCHLIB)/auto/Module/Build 
-	# Issue #2 - let's just trash these for now
+	# myperl issue #2 - let's just trash these for now
 	rm -rf \
 		$(DESTDIR)$(SITESCRIPTEXP)/config_data \
 		$(DESTDIR)$(SITEMAN1EXP)/config_data.1 \
