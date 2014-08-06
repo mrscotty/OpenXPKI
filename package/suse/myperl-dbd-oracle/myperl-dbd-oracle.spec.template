@@ -25,6 +25,9 @@ buildroot: %{_tmppath}/%{name}-%{version}-%(id -u -n)
 prefix:    %(echo %{_prefix})
 BuildRequires: myperl
 Requires: myperl
+# Some oracle installations are so complicated that they don't package the libcltsh.so directly,
+# but have some convoluted install script that unpacks it from somewhere else.
+AutoReqProv: no
 #source:    %{pkgname}-%{version}.tar.gz
 
 %description
