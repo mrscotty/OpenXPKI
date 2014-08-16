@@ -6,7 +6,7 @@
 #   - OpenXPKI HTML Mason client package -
 #
 
-%define pkgname myperl-openxpki-core
+%define pkgname myperl-openxpki-enroll
 %define filelist %{pkgname}-%{version}-filelist
 %define NVR %{pkgname}-%{version}-%{release}
 %define maketest 0
