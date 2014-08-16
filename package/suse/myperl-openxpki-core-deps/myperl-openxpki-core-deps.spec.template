@@ -9,7 +9,7 @@
 %define __perl /opt/myperl/bin/perl
 
 name:      %{pkgname}
-summary:   DBD::mysql packaged for myperl
+summary:   OpenXPKI Core Perl CPAN dependencies packaged for myperl
 version:   [% version %]
 [% IF PKGREL %]
 release: [% PKGREL %]
@@ -28,7 +28,7 @@ Requires: myperl libexpat1
 source:    %{pkgname}-%{version}.tar.gz
 
 %description
-DBD::mysql packaged for myperl
+OpenXPKI Core Perl CPAN dependencies packaged for myperl
 
 Packaging information:
 OpenXPKI version       [% version %]
@@ -42,18 +42,8 @@ Git tags:              [%- IF GIT_TAGS -%]
 
 %prep
 %setup -q -n %{pkgname}-%{version} 
-#chmod -R u+w %{_builddir}/%{pkgname}-%{version}
 
 %build
-#grep -rsl '^#!.*perl' . |
-#grep -v '.bak$' |xargs --no-run-if-empty \
-#%__perl -MExtUtils::MakeMaker -e 'MY->fixin(@ARGV)'
-#CFLAGS="$RPM_OPT_FLAGS"
-#%{__perl} Makefile.PL `%{__perl} -MExtUtils::MakeMaker -e ' print qq|PREFIX=%{buildroot}%{_prefix}| if \$ExtUtils::MakeMaker::VERSION =~ /5\.9[1-6]|6\.0[0-5]/ '` _MAKEPL_ARGS_
-#%{__make} 
-#%if %maketest
-#%{__make} test
-#%endif
 
 %install
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
@@ -89,16 +79,6 @@ ls -la
 echo "DEBUG: end of list"
 echo "DEBUG: PATH=$PATH"
 (cd core/server && $CPANM $CPANM_OPTS --installdeps .)
-
-
-## This next line does a regular CPAN-style install. Our Mojo app, however,
-## needs to go in /srv/www/enroller and *not* with the other Perl modules.
-## If you *do* decide to install CPAN-style, the Mojo app won't find its
-## templates and public directories.
-##%{makeinstall} `%{__perl} -MExtUtils::MakeMaker -e ' print \$ExtUtils::MakeMaker::VERSION <= 6.05 ? qq|PREFIX=%{buildroot}%{_prefix}| : qq|DESTDIR=%{buildroot}| '`
-#
-#install -d -D -m 755 %{buildroot}/srv/www/enroller
-#tar cf - lib public script templates | tar -C %{buildroot}/srv/www/enroller/ -x -f -
 
 cmd=/usr/share/spec-helper/compress_files
 [ -x $cmd ] || cmd=/usr/lib/rpm/brp-compress
