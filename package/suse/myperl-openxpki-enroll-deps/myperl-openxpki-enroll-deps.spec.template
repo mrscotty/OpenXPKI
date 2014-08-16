@@ -23,8 +23,8 @@ group:     Applications/CPAN
 url:       http://www.openxpki.org
 buildroot: %{_tmppath}/%{name}-%{version}-%(id -u -n)
 prefix:    %(echo %{_prefix})
-BuildRequires: myperl libexpat-devel
-Requires: myperl libexpat1
+BuildRequires: myperl
+Requires: myperl
 source:    %{pkgname}-%{version}.tar.gz
 
 %description
