@@ -7,7 +7,7 @@ PERL_VERSION=5.20.0
 MYPERL_RELEASE=1
 OXI_VERSION=$(shell ../../../tools/vergen --format version)
 
-PACKAGE=myperl-openxpki-enrollment
+PACKAGE=myperl-openxpki-enroll
 SRCBASE=$(TOPDIR)/clients/perl/OpenXPKI-Client-Enrollment
 SRCNAME=$(PACKAGE)
 
