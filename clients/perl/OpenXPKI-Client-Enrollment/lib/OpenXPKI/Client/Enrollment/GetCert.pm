@@ -8,7 +8,7 @@ use Proc::SafeExec;
 
 has 'sscep_conf' => ( lazy => 1, default => 'etc/sscep.conf' );
 
-my $csr_filename;    # this is for entire module so it is visible in END{}
+my $crt_filename;    # this is for entire module so it is visible in END{}
 
 # This action will render a template
 sub getcert {
@@ -50,8 +50,31 @@ sub getcert {
 
     my $output;
 
+    # Create the temporary file for the cert to be fetched
+    # (we really only need the filename)
+    # Try new temp filenames until we get one that didn't already exist
+    my $crt_fh;
+    do { $crt_filename = tmpnam() }
+        until $crt_fh = IO::File->new( $crt_filename, O_RDWR | O_CREAT | O_EXCL );
+
+    # install atexit-style handler so that when we exit or die,
+    # we automatically delete the temporary file
+    END {
+        if ($crt_filename) {
+            unlink($crt_filename) or warn "Couldn't unlink $crt_filename: $!";
+        }
+    }
+
+    my @exec_args = (
+        $sscep_cmd,
+        '-c' => $sscep_cfg,
+        '-w' => $crt_filename,
+        'getcert',
+        $certid,
+    );
+
     my $fwd = new Proc::SafeExec(
-        {   exec   => [ $sscep_cmd, $sscep_cfg, 'getcert', $certid ],
+        {   exec   => \@exec_args,
             stdout => 'new',
             stderr => 'new'
         }
@@ -66,7 +89,8 @@ sub getcert {
     $fwd->wait();
     my $exit_status = $fwd->exit_status() >> 8;
 
-    close $csr_fh;
+    close $fwd_stdout;
+    close $fwd_stderr;
 
     if ( $exit_status == 0 ) {
         $self->render(
@@ -89,7 +113,7 @@ EOF
             template => 'error',
             message  => "Error processing CSR: ($exit_status) ",
             details  => join( '',
-                "\nCOMMAND:\n",  "\t$sscep_cmd $sscep_cfg $csr_filename\n",
+                "\nCOMMAND:\n",  "\t$sscep_cmd $sscep_cfg $crt_filename\n",
                 "\nSTDERR:\n",   @stderr,
                 "\n\nSTDOUT:\n", @stdout )
         );
