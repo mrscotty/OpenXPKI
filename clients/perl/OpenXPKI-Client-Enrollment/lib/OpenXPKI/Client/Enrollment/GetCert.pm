@@ -93,27 +93,31 @@ sub getcert {
     close $fwd_stderr;
 
     if ( $exit_status == 0 ) {
+        seek( $crt_fh, 0, 0 );
+        my $crt = join( '', <$crt_fh> );
+        close $crt_fh;
         $self->render(
             message => "Certificate has beeen issued.",
-            certsn  => "12345",
+            certpem  => $crt,
             details => 'The certificate for your request has been issued.',
         );
     }
-    elsif ( $exit_status == 3 ) {
-        $self->render(
-            message => "Accepted CSR for further processing. ",
-            details => <<EOF,
-Your CSR has been accepted and submitted for approval and you will
-be receiving an e-mail confirmation shortly. 
-EOF
-        );
-    }
+#    elsif ( $exit_status == 3 ) {
+#        $self->render(
+#            message => "Accepted CSR for further processing. ",
+#            details => <<EOF,
+#Your CSR has been accepted and submitted for approval and you will
+#be receiving an e-mail confirmation shortly. 
+#EOF
+#        );
+#    }
     else {
         $self->render(
             template => 'error',
-            message  => "Error processing CSR: ($exit_status) ",
+            message  => "Error getting certificate: ($exit_status) ",
             details  => join( '',
-                "\nCOMMAND:\n",  "\t$sscep_cmd $sscep_cfg $crt_filename\n",
+                "\nCOMMAND:\n",  "\t",
+                join(', ', @exec_args),
                 "\nSTDERR:\n",   @stderr,
                 "\n\nSTDOUT:\n", @stdout )
         );
