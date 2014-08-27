@@ -63,9 +63,9 @@ Git tags:              [%- IF GIT_TAGS -%]
 
 PERL=%{__perl}
 
-SITELIB=`%{__perl} "-V:sitelib" | awk -F\' '{print $2}'`
-SITEARCH=`%{__perl} "-V:sitearch" | awk -F\' '{print $2}'`
-SITELIBEXP=%{buildroot}/`%{__perl} "-V:sitelibexp" | awk -F\' '{print $2}'`
+VENDORLIB=`%{__perl} "-V:vendorlib" | awk -F\' '{print $2}'`
+VENDORARCH=`%{__perl} "-V:vendorarch" | awk -F\' '{print $2}'`
+VENDORLIBEXP=%{buildroot}/`%{__perl} "-V:vendorlibexp" | awk -F\' '{print $2}'`
 ARCHNAME=`%{__perl} "-V:archname" | awk -F\' '{print $2}'`
 ARCHLIB=`%{__perl} "-V:archlib" | awk -F\' '{print $2}'`
 PRIVLIB=`%{__perl} "-V:privlib" | awk -F\' '{print $2}'`
@@ -73,9 +73,9 @@ CPANM="%{__perl} `pwd`/cpanm"
 CPANM_OPTS="--notest --skip-satisfied --skip-installed --verbose"
 
 # Environment vars neede for proper Perl module installation
-export PERL5LIB=%{buildroot}/$SITEARCH:%{buildroot}/$SITELIB
-export PERL_MB_OPT="--destdir '%{buildroot}' --installdirs site"
-export PERL_MM_OPT="INSTALLDIRS=site DESTDIR=%{buildroot}"
+export PERL5LIB=%{buildroot}/$VENDORARCH:%{buildroot}/$VENDORLIB
+export PERL_MB_OPT="--destdir '%{buildroot}' --installdirs vendor"
+export PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR=%{buildroot}"
 export DESTDIR="%{buildroot}"
 
 curl -LO http://xrl.us/cpanm
