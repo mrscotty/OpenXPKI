@@ -51,22 +51,22 @@ set -e
 
 PERL=%{__perl}
 
-SITELIB=`%{__perl} "-V:sitelib" | awk -F\' '{print $2}'`
-SITEARCH=`%{__perl} "-V:sitearch" | awk -F\' '{print $2}'`
-SITELIBEXP=%{buildroot}/`%{__perl} "-V:sitelibexp" | awk -F\' '{print $2}'`
+VENDORLIB=`%{__perl} "-V:vendorlib" | awk -F\' '{print $2}'`
+VENDORARCH=`%{__perl} "-V:vendorarch" | awk -F\' '{print $2}'`
+VENDORLIBEXP=%{buildroot}/`%{__perl} "-V:vendorlibexp" | awk -F\' '{print $2}'`
 ARCHNAME=`%{__perl} "-V:archname" | awk -F\' '{print $2}'`
 ARCHLIB=`%{__perl} "-V:archlib" | awk -F\' '{print $2}'`
-SITEMAN1EXP=`%{__perl} "-V:siteman1direxp" | awk -F\' '{print $2}'`
-SITEMAN3EXP=`%{__perl} "-V:siteman3direxp" | awk -F\' '{print $2}'`
-SITESCRIPTEXP=`%{__perl} "-V:sitescriptexp" | awk -F\' '{print $2}'`
+VENDORMAN1EXP=`%{__perl} "-V:vendorman1direxp" | awk -F\' '{print $2}'`
+VENDORMAN3EXP=`%{__perl} "-V:vendorman3direxp" | awk -F\' '{print $2}'`
+VENDORSCRIPTEXP=`%{__perl} "-V:vendorscriptexp" | awk -F\' '{print $2}'`
 PRIVLIB=`%{__perl} "-V:privlib" | awk -F\' '{print $2}'`
 CPANM="%{__perl} `pwd`/cpanm"
 CPANM_OPTS="--notest --skip-satisfied --skip-installed --verbose"
 
 # Environment vars neede for proper Perl module installation
-export PERL5LIB=%{buildroot}/$SITEARCH:%{buildroot}/$SITELIB
-export PERL_MB_OPT="--destdir '%{buildroot}' --installdirs site"
-export PERL_MM_OPT="INSTALLDIRS=site DESTDIR=%{buildroot}"
+export PERL5LIB=%{buildroot}/$VENDORARCH:%{buildroot}/$VENDORLIB
+export PERL_MB_OPT="--destdir '%{buildroot}' --installdirs vendor"
+export PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR=%{buildroot}"
 export DESTDIR="%{buildroot}"
 
 curl -LO http://xrl.us/cpanm
@@ -105,36 +105,36 @@ find %{buildroot} -name "perllocal.pod" \
 # DESTDIR = %{buildroot}
 set -e
 rm -rf \
-		$DESTDIR/$SITEMAN3EXP/CGI.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Apache.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Carp.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Cookie.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Pretty.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Push.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Switch.3 \
-		$DESTDIR/$SITEMAN3EXP/CGI::Util.3 \
-		$DESTDIR/$SITELIB/CGI.pm \
-		$DESTDIR/$SITELIB/CGI/Apache.pm \
-		$DESTDIR/$SITELIB/CGI/Carp.pm \
-		$DESTDIR/$SITELIB/CGI/Cookie.pm \
-		$DESTDIR/$SITELIB/CGI/Pretty.pm \
-		$DESTDIR/$SITELIB/CGI/Push.pm \
-		$DESTDIR/$SITELIB/CGI/Switch.pm \
-		$DESTDIR/$SITELIB/CGI/Util.pm \
-		$DESTDIR/$SITEMAN3EXP/Module::Build* \
-		$DESTDIR/$SITELIB/Module/Build.pm \
-		$DESTDIR/$SITELIB/Module/Build \
+		$DESTDIR/$VENDORMAN3EXP/CGI.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Apache.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Carp.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Cookie.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Pretty.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Push.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Switch.3 \
+		$DESTDIR/$VENDORMAN3EXP/CGI::Util.3 \
+		$DESTDIR/$VENDORLIB/CGI.pm \
+		$DESTDIR/$VENDORLIB/CGI/Apache.pm \
+		$DESTDIR/$VENDORLIB/CGI/Carp.pm \
+		$DESTDIR/$VENDORLIB/CGI/Cookie.pm \
+		$DESTDIR/$VENDORLIB/CGI/Pretty.pm \
+		$DESTDIR/$VENDORLIB/CGI/Push.pm \
+		$DESTDIR/$VENDORLIB/CGI/Switch.pm \
+		$DESTDIR/$VENDORLIB/CGI/Util.pm \
+		$DESTDIR/$VENDORMAN3EXP/Module::Build* \
+		$DESTDIR/$VENDORLIB/Module/Build.pm \
+		$DESTDIR/$VENDORLIB/Module/Build \
 		$DESTDIR/$ARCHLIB/auto/Module/Build 
 # myperl issue #2 - let's just trash these for now
 rm -rf \
-		$DESTDIR/$SITESCRIPTEXP/config_data \
-		$DESTDIR/$SITEMAN1EXP/config_data.1 \
-		$DESTDIR/$SITEMAN3EXP/inc::latest.3 \
-		$DESTDIR/$SITELIB/inc
+		$DESTDIR/$VENDORSCRIPTEXP/config_data \
+		$DESTDIR/$VENDORMAN1EXP/config_data.1 \
+		$DESTDIR/$VENDORMAN3EXP/inc::latest.3 \
+		$DESTDIR/$VENDORLIB/inc
 
 # TODO: SOAPsh.pl has /bin/env in shebang, which causes a dependency
 # problem when rpm searches for automatic dependencies
-perl -i -p -e 's{#!/bin/env}{#!/usr/bin/env}' $DESTDIR/$SITESCRIPTEXP/SOAPsh.pl
+perl -i -p -e 's{#!/bin/env}{#!/usr/bin/env}' $DESTDIR/$VENDORSCRIPTEXP/SOAPsh.pl
 
 # no empty directories
 #find %{buildroot}%{_prefix}             \
