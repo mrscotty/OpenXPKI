@@ -31,7 +31,11 @@ This starts and provisions the Vagrant instance:
     # Add mirror to local Vagrantfile config (optional)
     echo '@localcfg["mirror"] = ENV["HOME"] + "/mirrors"' >> Vagrantfile.local
 
+    # debian
     vagrant up build-myperl
+
+    # ubuntu
+    vagrant up xenial-myperl
     
 ## Build All myperl Packages From Clean Instance
 

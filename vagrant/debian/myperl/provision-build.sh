@@ -3,7 +3,7 @@
 # Provision the myperl build vagrant instance (debian jessie)
 # (run as root)
 
-aptitude update
+apt-get update
 
 # Install the deps
 export DEBIAN_FRONTEND=noninteractive

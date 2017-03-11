@@ -47,7 +47,7 @@ function pkg_installed {
             rpm -q "$1" >/dev/null 2>&1
             return $?
             ;;
-        debian)
+        debian|ubuntu)
             dpkg -s "$1" >/dev/null 2>&1
             return $?
             ;;
@@ -66,7 +66,7 @@ function pkg_inst {
             rpm -i "$1"
             return $?
             ;;
-        debian)
+        debian|ubuntu)
             if [ -f "$1" ]; then
                 sudo dpkg -i "$1"
                 return $?
@@ -93,6 +93,15 @@ if [ -e /etc/debian_version ]; then
 fi
 if [ -e /etc/SuSE-release ]; then
     DISTNAME=suse
+fi
+if [ -e /etc/lsb-release ]; then
+    . /etc/lsb-release
+    DISTNAME=$(echo $DISTRIB_ID | tr '[:upper:]' '[:lower:]')
+fi
+
+# At the moment, force ubuntu to debian
+if [ "$DISTNAME" = "ubuntu" ]; then
+    DISTNAME=debian
 fi
 
 if [ "$DISTNAME" == "unknown" ]; then
@@ -396,6 +405,10 @@ function run_cache
 
 function run_myperl {
     cleantmp
+    if [ "$DISTNAME" = "ubuntu" ]; then
+        DISTNAME=debian
+    fi
+    set -x
     (cd ~/git/myperl && make fetch-perl $DISTNAME)
     MYPERL_VERSION=$(get_myperl_version)
     case $DISTNAME in

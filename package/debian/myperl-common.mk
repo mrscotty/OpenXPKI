@@ -94,7 +94,7 @@ debian/changelog:
 	$(call assert-not-null,PACKAGE_VER)
 	$(call assert-not-null,PACKAGE_REL)
 	test -d $(dir $@) || mkdir $(dir $@)
-	debchange --create --package $(PACKAGE_NAME) \
+	PERL5LIB= debchange --create --package $(PACKAGE_NAME) \
 		--newversion $(PACKAGE_VER).$(PACKAGE_REL) autobuild
 
 clean:
@@ -108,6 +108,6 @@ clean:
 # This target writes the package and other debian files to the parent directory '..'
 # It will cause the debian helper stuff to run all the above target(s).
 package: debian/changelog
-	DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc
+	PERL5LIB= DEB_BUILD_OPTIONS=nocheck dpkg-buildpackage -us -uc
 
 

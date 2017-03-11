@@ -48,6 +48,8 @@ install: info
 	# myperl issue #2 - until I can get Pinto running, just remove the offending files
 	# Note: since this is a nasty kludge, I'll leave the fail-on-error behavior
 	# of make.
+	rm -f \
+		$(DESTDIR)$(SITEARCH)/auto/Module/Build/.packlist
 	rm -rf \
 		$(DESTDIR)$(SITEMAN3EXP)/CGI.3 \
 		$(DESTDIR)$(SITEMAN3EXP)/CGI::Apache.3 \
@@ -77,4 +79,14 @@ install: info
 		$(DESTDIR)$(SITEMAN1EXP)/config_data.1 \
 		$(DESTDIR)$(SITEMAN3EXP)/inc::latest.3 \
 		$(DESTDIR)$(SITELIB)/inc
+	# search through $DESTDIR for files, chomping off the $DESTDIR prefix so
+	# it's easier to do the comparison with files already installed.
+	echo "DEBUG: THIS IS THE SPOT WITH THE MAGIC!!!"
+	for i in $$(find $(DESTDIR) -type f -print|perl -pe 's{^$(DESTDIR)}{}'); do \
+		if [ -f $$i ]; then \
+			echo "removing duplicate of '$$i'"; \
+			rm $(DESTDIR)$$i; \
+		fi; \
+	done
+
 

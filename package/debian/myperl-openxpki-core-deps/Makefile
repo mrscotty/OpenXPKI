@@ -35,15 +35,27 @@ install: info
 		$(DESTDIR)$(SITEMAN3EXP)/Sub::Util.3 \
 		$(DESTDIR)$(SITEMAN3EXP)/Scalar::Util.3 \
 		$(DESTDIR)$(SITEMAN3EXP)/Module::Build* \
+		$(DESTDIR)$(SITEMAN3EXP)/XSLoader.3 \
 		$(DESTDIR)$(SITELIB)/Module/Build.pm \
 		$(DESTDIR)$(SITELIB)/Module/Build \
 		$(DESTDIR)$(SITEARCH)/auto/Module/Build \
 		$(DESTDIR)$(ARCHLIB)/auto/Module/Build 
-
 	# myperl issue #2 - let's just trash these for now
 	rm -rf \
 		$(DESTDIR)$(SITESCRIPTEXP)/config_data \
 		$(DESTDIR)$(SITEMAN1EXP)/config_data.1 \
 		$(DESTDIR)$(SITEMAN3EXP)/inc::latest.3 \
 		$(DESTDIR)$(SITELIB)/inc
+	# search through $DESTDIR for files, chomping off the $DESTDIR prefix so
+	# it's easier to do the comparison with files already installed.
+	echo "DEBUG: THIS IS THE SPOT WITH THE MAGIC!!!"
+	for i in $$(find $(DESTDIR) -type f -print|perl -pe 's{^$(DESTDIR)}{}'); do \
+		if [ -f $$i ]; then \
+			echo "removing duplicate of '$$i'"; \
+			rm $(DESTDIR)$$i; \
+		fi; \
+	done
+
+
+	
 
